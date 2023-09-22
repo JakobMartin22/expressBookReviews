@@ -71,17 +71,41 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
       return res.status(400).json({ message: "Review text is required." });
     }
     
-    // Update or add the review as an object within the reviews property
+    // Add review
     book.reviews[reviewId] = {
       username: username,
       text: reviewText
     };
     
-    // Check if it's an update or addition and send an appropriate response
+    // check add or modify
     if (book.reviews[reviewId]) {
       return res.status(200).json({ message: "Review modified successfully." });
     } else {
       return res.status(200).json({ message: "Review added successfully." });
+    }
+  } else {
+    return res.status(404).json({ message: "Book Not Found" });
+  }
+});
+
+//Delete Book Review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    //Write code here
+    const username = req.session.authorization.username;
+
+  // Find book
+  const isbn = req.params.isbn;
+
+  if (books[isbn]) {
+    let book = books[isbn];
+
+    // check existing review
+    if (book.reviews.hasOwnProperty(username)) {
+      // Delete review
+      delete book.reviews[username];
+      return res.status(200).json({ message: "Review deleted successfully." });
+    } else {
+      return res.status(404).json({ message: "Review not found for this book." });
     }
   } else {
     return res.status(404).json({ message: "Book Not Found" });
