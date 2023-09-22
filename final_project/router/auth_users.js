@@ -5,8 +5,8 @@ const regd_users = express.Router();
 
 let users = [];
 
-const isValid = (username)=>{ //returns boolean
-//write code to check is the username is valid
+const isValid = (username)=>{ 
+
 let userswithsamename = users.filter((user)=>{
     return user.username === username
   });
@@ -17,8 +17,8 @@ let userswithsamename = users.filter((user)=>{
   }
 }
 
-const authenticatedUser = (username,password)=>{ //returns boolean
-//write code to check if username and password match the one we have in records.
+const authenticatedUser = (username,password)=>{ 
+
 let validusers = users.filter((user)=>{
     return (user.username === username && user.password === password)
   });
@@ -64,7 +64,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     let book = books[isbn];
     
     // Check existing review
-    const reviewId = username; // Use the username as the review ID
+    const reviewId = username; 
     const reviewText = req.body.review;
     
     if (reviewText === undefined || reviewText.trim() === "") {

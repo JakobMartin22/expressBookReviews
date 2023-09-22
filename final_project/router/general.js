@@ -98,4 +98,96 @@ public_users.get('/review/:isbn',function (req, res) {
   }
 });
 
+//=====Async routings=====
+
+//task 10 - list of books
+public_users.get('/async-book-list', async function (req, res) {
+    try {
+      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      res.send(JSON.stringify(books,null,4));
+      
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
+  //task 11 - ISBN
+  public_users.get('/async-isbn', async function (req, res) {
+    try {
+      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      const isbn = req.params.isbn;
+      if (books[isbn]) {
+        res.json(books[isbn]);
+      }
+      else {
+      return res.status(300).json({message: "ISBN Not Found"});
+      }
+      
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
+  //task 12 - Author
+  public_users.get('/async-author', async function (req, res) {
+    try {
+      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      const findAuthor = req.params.author;
+  const matchBooks = [];
+
+  //obtain all isbn for books object
+  for (const isbn of Object.keys(books)) {
+      const book = books[isbn];
+
+  if (book.author === findAuthor) {
+    matchBooks.push(book);
+  }
+}
+
+ if (matchBooks.length > 0) {
+     res.json(matchBooks);
+ } else {
+  return res.status(300).json({message: "No books found by this Author Found"});
+  }
+      
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
+  //task 13 - Title
+  public_users.get('/async-title', async function (req, res) {
+    try {
+      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      const findTitle = req.params.title;
+      const matchBooks = [];
+
+  //obtain isbn for books object
+  for (const isbn of Object.keys(books)) {
+      const book = books[isbn];
+
+  if (book.title === findTitle) {
+    matchBooks.push(book);
+  }
+}
+
+ if (matchBooks.length > 0) {
+     res.json(matchBooks);
+ } else {
+  return res.status(300).json({message: "No Books with this Title Found"});
+  }
+      
+    } catch (error) {
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
 module.exports.general = public_users;
